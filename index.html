@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oscorp Industries — Bio-Engineering &amp; Genetics Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:wght@700&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --oscorp-emerald: #00d27a;
+      --oscorp-dark: #070d12;
+      --oscorp-panel: #0e1821;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--oscorp-dark);
+      color: #e6f0f5;
+      overflow-x: hidden;
+    }
+
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-serif-badge { font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif; }
+
+    .hex-bg {
+      background-image:
+        radial-gradient(circle at 18% 15%, rgba(0, 210, 122, 0.14), transparent 36%),
+        radial-gradient(circle at 85% 80%, rgba(14, 165, 233, 0.12), transparent 40%),
+        linear-gradient(rgba(0, 210, 122, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 210, 122, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 38px 38px, 38px 38px;
+    }
+
+    /* Official Oscorp Front ID Card */
+    .oscorp-id-front {
+      width: 300px;
+      height: 480px;
+      background: #ffffff;
+      color: #0b0b0b;
+      border: 2.5px solid #0b0b0b;
+      border-radius: 14px;
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 18px 18px;
+      position: relative;
+      user-select: none;
+    }
+
+    .vertical-letters {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      line-height: 1;
+    }
+
+    /* Official Oscorp Back ID Card */
+    .oscorp-id-back {
+      width: 300px;
+      height: 480px;
+      background: #ffffff;
+      color: #0b0b0b;
+      border: 2px solid #0b0b0b;
+      border-radius: 6px;
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.55);
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .vertical-text-cw {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    .barcode-stripes {
+      width: 44px;
+      height: 155px;
+      background: repeating-linear-gradient(
+        to bottom,
+        #0b0b0b 0px, #0b0b0b 3px,
+        #ffffff 3px, #ffffff 5px,
+        #0b0b0b 5px, #0b0b0b 6px,
+        #ffffff 6px, #ffffff 9px,
+        #0b0b0b 9px, #0b0b0b 13px,
+        #ffffff 13px, #ffffff 15px,
+        #0b0b0b 15px, #0b0b0b 16px,
+        #ffffff 16px, #ffffff 20px
+      );
+    }
+
+    .nav-btn.active {
+      background: rgba(0, 210, 122, 0.14);
+      color: #00d27a;
+      border-color: rgba(0, 210, 122, 0.45);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 210, 122, 0.35); }
+      50% { box-shadow: 0 0 24px 4px rgba(0, 210, 122, 0.2); }
+    }
+    .glow-card { animation: pulseGlow 4s infinite; }
+  </style>
+</head>
+<body class="hex-bg min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-[#070d12]/90 border-b border-emerald-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- Brand Title -->
+      <button onclick="navigateTo('home')" class="flex items-center gap-3 text-left group focus:outline-none">
+        <div class="w-9 h-9 rounded-lg bg-emerald-500/15 border border-emerald-400/40 flex items-center justify-center group-hover:bg-emerald-500/25 transition">
+          <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 21 7 21 17 12 22 3 17 3 7 12 2"></polygon>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        <div>
+          <span class="font-orbitron font-bold tracking-wider text-white text-base sm:text-lg block leading-none">Oscorp Industries</span>
+          <span class="text-[10px] uppercase tracking-[0.22em] text-emerald-400/80">Genetics &amp; Cross-Species Lab</span>
+        </div>
+      </button>
+
+      <!-- Main Navigation -->
+      <nav class="hidden md:flex items-center gap-1.5">
+        <button data-nav="home" onclick="navigateTo('home')" class="nav-btn active px-3.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-transparent text-slate-300 hover:text-white transition">
+          Home
+        </button>
+        <button data-nav="characters" onclick="navigateTo('characters')" class="nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-transparent text-slate-300 hover:text-white transition">
+          Characters
+        </button>
+        <button data-nav="store" onclick="navigateTo('store')" class="nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-transparent text-slate-300 hover:text-white transition">
+          Bio-Tech Store
+        </button>
+        <button data-nav="membership" onclick="navigateTo('membership')" class="nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-transparent text-slate-300 hover:text-white transition">
+          Be a Member
+        </button>
+        <button data-nav="lookup" onclick="navigateTo('lookup')" class="nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-transparent text-slate-300 hover:text-white transition">
+          ID Lookup
+        </button>
+      </nav>
+
+      <!-- Auth Status & Action -->
+      <div id="authHeaderArea" class="flex items-center gap-2.5"></div>
+    </div>
+
+    <!-- Mobile Navigation Strip -->
+    <div class="md:hidden flex items-center justify-around border-t border-slate-800/80 px-2 py-1.5 bg-[#091118] text-[11px] font-semibold">
+      <button data-nav="home" onclick="navigateTo('home')" class="nav-btn active px-2.5 py-1 rounded border border-transparent">Home</button>
+      <button data-nav="characters" onclick="navigateTo('characters')" class="nav-btn px-2.5 py-1 rounded border border-transparent">Characters</button>
+      <button data-nav="store" onclick="navigateTo('store')" class="nav-btn px-2.5 py-1 rounded border border-transparent">Store</button>
+      <button data-nav="membership" onclick="navigateTo('membership')" class="nav-btn px-2.5 py-1 rounded border border-transparent">Membership</button>
+      <button data-nav="lookup" onclick="navigateTo('lookup')" class="nav-btn px-2.5 py-1 rounded border border-transparent">ID Lookup</button>
+    </div>
+  </header>
+
+  <!-- Toast Notification Banner -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ==================== 1. HOMEPAGE SECTION ==================== -->
+    <section id="section-home" class="page-section space-y-12">
+      <!-- Hero Banner -->
+      <div class="rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#0d1922] via-[#0a131a] to-[#070d12] p-6 sm:p-10 lg:p-12 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-24 -top-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+          <!-- Left Welcome Copy -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold tracking-wider uppercase">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              Manhattan Tower • Genetics Division
+            </div>
+
+            <h1 class="font-orbitron text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+              Oscorp Industries
+            </h1>
+
+            <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+              Pioneering cross-species genetics, neural-reactive prosthetics, and bio-cable technology. Explore our classified personnel archive, acquire authorized Oscorp bio-tech, or register for your official Genetics Laboratory Staff ID badge.
+            </p>
+
+            <div class="flex flex-wrap gap-3.5 pt-2">
+              <button onclick="navigateTo('characters')" class="px-5 py-3 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600/70 text-white font-semibold text-sm transition flex items-center gap-2">
+                <span>Characters</span>
+                <span class="text-emerald-400">→</span>
+              </button>
+              <button onclick="navigateTo('lookup')" class="px-5 py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-emerald-500/35 text-emerald-300 font-semibold text-sm transition">
+                Verify / Lookup ID Card
+              </button>
+              <button onclick="navigateTo('store')" class="px-5 py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold text-sm transition">
+                Bio-Tech Store
+              </button>
+            </div>
+
+            <!-- Live System Telemetry -->
+            <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-800/80 max-w-lg">
+              <div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider">Next Serial ID</div>
+                <div id="homeNextSerial" class="font-orbitron text-lg font-bold text-emerald-400 mt-0.5">A00001</div>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider">Issued Badges</div>
+                <div id="homeMemberCount" class="font-orbitron text-lg font-bold text-white mt-0.5">1</div>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider">Clearance Mode</div>
+                <div id="homeClearanceLabel" class="text-xs font-bold text-amber-300 mt-1.5">Exclusive Owner Active</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Featured CTA: Image 1 Sample Badge + "Be a Member of Oscorp" -->
+          <div class="lg:col-span-5 flex flex-col items-center">
+            <div onclick="handleBeAMemberClick()" role="button" tabindex="0"
+              class="group cursor-pointer rounded-2xl p-5 bg-[#0b151e]/95 border-2 border-emerald-500/35 hover:border-emerald-400 transition-all duration-300 glow-card flex flex-col items-center text-center max-w-sm w-full">
+              <div class="text-xs uppercase tracking-[0.2em] text-emerald-400 font-bold mb-3">
+                Official Staff Credential Preview
+              </div>
+
+              <!-- Reference Image 1 Replica Card -->
+              <div id="homeSampleBadgeWrapper" class="transform group-hover:scale-[1.02] transition-transform duration-300"></div>
+
+              <div class="mt-5 w-full">
+                <div class="w-full py-3.5 px-5 rounded-xl bg-emerald-500 group-hover:bg-emerald-400 text-slate-950 font-orbitron font-extrabold text-sm sm:text-base tracking-wide uppercase shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-2">
+                  <span>Be a Member of Oscorp</span>
+                  <span>→</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2">
+                  Click to upload your photo, register your name, and generate your sequential ID &amp; QR badge.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Portal Modules Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div onclick="navigateTo('characters')" class="cursor-pointer rounded-xl p-6 bg-[#0e1821] border border-slate-800 hover:border-emerald-500/40 transition group">
+          <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold mb-4">01</div>
+          <h3 class="font-orbitron font-bold text-white text-lg group-hover:text-emerald-400 transition">Characters Archive</h3>
+          <p class="text-sm text-slate-400 mt-2">Browse personnel and subjects from <em>The Amazing Spider-Man</em>. Click any profile for full biographical and Oscorp dossier records.</p>
+        </div>
+
+        <div onclick="navigateTo('store')" class="cursor-pointer rounded-xl p-6 bg-[#0e1821] border border-slate-800 hover:border-emerald-500/40 transition group">
+          <div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center font-bold mb-4">02</div>
+          <h3 class="font-orbitron font-bold text-white text-lg group-hover:text-sky-400 transition">Owner-Controlled Sales</h3>
+          <p class="text-sm text-slate-400 mt-2">Authorized Oscorp equipment and genetic serums. Product listing and inventory pricing are strictly restricted to the exclusive Website Owner.</p>
+        </div>
+
+        <div onclick="navigateTo('lookup')" class="cursor-pointer rounded-xl p-6 bg-[#0e1821] border border-slate-800 hover:border-emerald-500/40 transition group">
+          <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-4">03</div>
+          <h3 class="font-orbitron font-bold text-white text-lg group-hover:text-amber-400 transition">QR &amp; Serial Verification</h3>
+          <p class="text-sm text-slate-400 mt-2">Every new ID starts sequentially from <span class="text-emerald-400 font-mono">A00001</span> and generates a scannable QR code that opens the member's verified ID badge.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. CHARACTERS SECTION ==================== -->
+    <section id="section-characters" class="page-section hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">The Amazing Spider-Man Dossier</span>
+          <h2 class="font-orbitron text-3xl font-bold text-white mt-1">Characters</h2>
+          <p class="text-sm text-slate-400 mt-1">Click on any character card to inspect their complete profile, Oscorp connection, and biography.</p>
+        </div>
+        <div class="w-full sm:w-72">
+          <input id="characterSearchInput" type="text" oninput="renderCharactersGrid()" placeholder="Search character or actor..."
+            class="w-full px-4 py-2.5 rounded-xl bg-[#0e1821] border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400" />
+        </div>
+      </div>
+
+      <div id="charactersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+    </section>
+
+    <!-- ==================== 3. OWNER-ONLY PRODUCT SALES SECTION ==================== -->
+    <section id="section-store" class="page-section hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Authorized Distribution</span>
+          <h2 class="font-orbitron text-3xl font-bold text-white mt-1">Oscorp Bio-Tech Storefront</h2>
+          <p class="text-sm text-slate-400 mt-1">Visitors can browse and order products. Only the <strong class="text-amber-300">Exclusive Website Owner</strong> can list, edit, or remove products for sale.</p>
+        </div>
+        <div id="ownerStoreBadge"></div>
+      </div>
+
+      <!-- Owner-Only Product Publishing Console -->
+      <div id="ownerSellerPanel" class="hidden rounded-2xl bg-[#0e1821] border border-amber-400/40 p-6 shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Exclusive Owner Seller Console</span>
+            <h3 class="font-orbitron text-lg font-bold text-white">List New Product for Sale</h3>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold">Single-Owner Clearance Verified</span>
+        </div>
+
+        <form onsubmit="handleAddProduct(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Product Name *</label>
+            <input id="prodName" type="text" required placeholder="e.g., Web-Shooter Cartridge MK-II"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-[#070d12] border border-slate-700 text-sm text-white focus:border-emerald-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Price (USD) *</label>
+            <input id="prodPrice" type="number" step="0.01" min="1" required placeholder="499.00"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-[#070d12] border border-slate-700 text-sm text-white focus:border-emerald-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Category</label>
+            <select id="prodCategory" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070d12] border border-slate-700 text-sm text-white focus:border-emerald-400 focus:outline-none">
+              <option value="Bio-Cable &amp; Polymer">Bio-Cable &amp; Polymer</option>
+              <option value="Cross-Species Serum">Cross-Species Serum</option>
+              <option value="Neural Prosthetics">Neural Prosthetics</option>
+              <option value="Lab Equipment">Lab Equipment</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Product Photo (Optional)</label>
+            <input id="prodImageInput" type="file" accept="image/*"
+              class="w-full px-3 py-2 rounded-xl bg-[#070d12] border border-slate-700 text-xs text-slate-300 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-emerald-500/20 file:text-emerald-300" />
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Technical Description *</label>
+            <input id="prodDesc" type="text" required placeholder="High-tensile synthetic bio-cable engineered at Oscorp Tower..."
+              class="w-full px-3.5 py-2.5 rounded-xl bg-[#070d12] border border-slate-700 text-sm text-white focus:border-emerald-400 focus:outline-none" />
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm transition shadow-lg shadow-amber-500/20">
+              + Publish Product
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Non-Owner Notice Banner -->
+      <div id="nonOwnerStoreNotice" class="rounded-xl bg-slate-900/80 border border-slate-800 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="text-xs sm:text-sm text-slate-300">
+          <span class="text-amber-400 font-bold">Seller Restriction Active:</span> Only the exclusive Website Owner can add or sell items in this marketplace. Customers may browse and purchase listed products below.
+        </div>
+        <button onclick="openAuthModal('owner')" class="shrink-0 px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-bold transition">
+          Owner Status / Claim Lock
+        </button>
+      </div>
+
+      <!-- Product Catalog Grid -->
+      <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- ==================== 4 & 5. MEMBERSHIP REGISTRATION SECTION ==================== -->
+    <section id="section-membership" class="page-section hidden space-y-8">
+      <div class="border-b border-slate-800 pb-5">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Genetics Laboratory Access</span>
+        <h2 class="font-orbitron text-3xl font-bold text-white mt-1">Be a Member of Oscorp</h2>
+        <p class="text-sm text-slate-400 mt-1">Register your photo and name to receive a sequential Oscorp Staff Serial Number (<span class="font-mono text-emerald-400">A00001</span> → <span class="font-mono text-emerald-400">Z99999</span>) and scannable QR ID badge.</p>
+      </div>
+
+      <!-- Mandatory Login Gate -->
+      <div id="membershipLoginGate" class="hidden rounded-2xl bg-[#0e1821] border border-emerald-500/35 p-8 text-center max-w-xl mx-auto space-y-4">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-400 flex items-center justify-center mx-auto">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <h3 class="font-orbitron text-xl font-bold text-white">Login Required to Create Membership ID</h3>
+        <p class="text-sm text-slate-300">
+          Oscorp security policy mandates user authentication before generating a sequential Staff Serial Number or issuing a QR-verified ID card.
+        </p>
+        <div class="pt-2 flex flex-wrap justify-center gap-3">
+          <button onclick="openAuthModal('member')" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">
+            Login / Create Account to Continue
+          </button>
+        </div>
+      </div>
+
+      <!-- Authenticated Registration Workflow -->
+      <div id="membershipFormContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Registration Form -->
+        <div class="lg:col-span-6 rounded-2xl bg-[#0e1821] border border-slate-800 p-6 sm:p-8 space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <h3 class="font-orbitron text-lg font-bold text-white">Personnel Badge Application</h3>
+              <p class="text-xs text-slate-400">Logged in as <span id="regLoggedUserEmail" class="text-emerald-400 font-semibold"></span></p>
+            </div>
+            <div class="text-right">
+              <div class="text-[11px] uppercase tracking-wider text-slate-400">Assigned Next Serial</div>
+              <div id="regNextSerialBadge" class="font-orbitron text-base font-bold text-emerald-400">A00001</div>
+            </div>
+          </div>
+
+          <form id="membershipForm" onsubmit="handleMembershipSubmit(event)" class="space-y-5">
+            <!-- Step 1: Upload Photo -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                1. Upload Your Identification Photo *
+              </label>
+              <div class="flex items-center gap-4">
+                <div id="uploadThumbPreview" class="w-20 h-20 rounded-xl bg-[#070d12] border border-dashed border-emerald-500/50 flex items-center justify-center overflow-hidden text-xs text-slate-500 text-center p-1">
+                  No Photo
+                </div>
+                <div class="flex-1">
+                  <input id="memberPhotoInput" type="file" accept="image/*" required onchange="handleMemberPhotoPreview(event)"
+                    class="w-full text-xs text-slate-300 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-emerald-500/20 file:text-emerald-300 file:font-semibold hover:file:bg-emerald-500/30 cursor-pointer" />
+                  <p class="text-[11px] text-slate-400 mt-1.5">Front-facing portrait recommended for your Oscorp Staff ID.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Full Name -->
+            <div>
+              <label for="memberFullName" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                2. Enter Full Name *
+              </label>
+              <input id="memberFullName" type="text" required oninput="updateLiveDraftBadge()" placeholder="e.g., Peter Parker"
+                class="w-full px-4 py-3 rounded-xl bg-[#070d12] border border-slate-700 text-white text-sm focus:outline-none focus:border-emerald-400" />
+            </div>
+
+            <!-- Step 3: Division / Clearance -->
+            <div>
+              <label for="memberDivision" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                Laboratory Division
+              </label>
+              <select id="memberDivision" onchange="updateLiveDraftBadge()"
+                class="w-full px-4 py-3 rounded-xl bg-[#070d12] border border-slate-700 text-white text-sm focus:outline-none focus:border-emerald-400">
+                <option value="GENETICS LABORATORY">GENETICS LABORATORY</option>
+                <option value="CROSS-SPECIES RESEARCH">CROSS-SPECIES RESEARCH</option>
+                <option value="BIO-ENGINEERING DIV.">BIO-ENGINEERING DIV.</option>
+                <option value="SPECIAL PROJECTS">SPECIAL PROJECTS</option>
+              </select>
+            </div>
+
+            <!-- Step 4: Membership Price & Confirmation -->
+            <div class="rounded-xl bg-[#070d12] border border-emerald-500/30 p-4 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Oscorp Membership &amp; Badge Fee</span>
+                <span class="font-orbitron text-2xl font-extrabold text-emerald-400">$150.00</span>
+              </div>
+              <p class="text-xs text-slate-400">
+                Includes encrypted QR code credential, sequential serial ID issuance, and Genetics Laboratory clearance.
+              </p>
+              <label class="flex items-start gap-2.5 pt-2 border-t border-slate-800 cursor-pointer">
+                <input id="confirmPaymentCheckbox" type="checkbox" required class="mt-0.5 accent-emerald-500 w-4 h-4" />
+                <span class="text-xs text-slate-200 font-medium">
+                  I confirm the <strong>$150.00</strong> membership price and authorize immediate payment to generate my Oscorp ID card &amp; QR code.
+                </span>
+              </label>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-orbitron font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-emerald-500/25 transition">
+              Confirm Payment &amp; Generate ID + QR
+            </button>
+          </form>
+        </div>
+
+        <!-- Live Front & Back Card Output -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="rounded-2xl bg-[#0e1821] border border-slate-800 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <span id="badgePreviewStatusTag" class="text-xs font-bold uppercase tracking-wider text-amber-400">Live Draft Preview</span>
+                <h3 class="font-orbitron text-lg font-bold text-white">Generated Oscorp ID Card &amp; QR Code</h3>
+              </div>
+              <button id="downloadQrBtn" onclick="downloadGeneratedQR()" class="hidden px-3.5 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-xs font-bold transition">
+                Download QR PNG
+              </button>
+            </div>
+
+            <!-- Dual Card Display: Front (Image 1) + Back with QR (Image 2) -->
+            <div class="flex flex-wrap items-center justify-center gap-6 py-2">
+              <div id="liveFrontCardContainer"></div>
+              <div id="liveBackCardContainer"></div>
+            </div>
+
+            <!-- Scan Simulation & Direct Verification Link -->
+            <div id="issuedCardActions" class="hidden mt-5 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div class="text-xs text-slate-300">
+                Scan the QR code on the back card with any phone camera, or test the scan view directly:
+              </div>
+              <button id="simulateScanBtn" class="shrink-0 px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition">
+                Simulate QR Scan View
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. ID LOOKUP SYSTEM SECTION ==================== -->
+    <section id="section-lookup" class="page-section hidden space-y-8">
+      <div class="border-b border-slate-800 pb-5">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Personnel Verification Terminal</span>
+        <h2 class="font-orbitron text-3xl font-bold text-white mt-1">Membership ID Lookup</h2>
+        <p class="text-sm text-slate-400 mt-1">Enter your registered Name and Serial ID Number (e.g., <span class="font-mono text-emerald-400">Peter Parker</span> &amp; <span class="font-mono text-emerald-400">A00810</span> or <span class="font-mono text-emerald-400">A00001</span>) to retrieve your ID badge.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Search Form -->
+        <div class="lg:col-span-5 rounded-2xl bg-[#0e1821] border border-slate-800 p-6 space-y-5">
+          <form onsubmit="handleIdLookup(event)" class="space-y-4">
+            <div>
+              <label for="lookupNameInput" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Member Full Name *</label>
+              <input id="lookupNameInput" type="text" required placeholder="e.g., Peter Parker"
+                class="w-full px-4 py-3 rounded-xl bg-[#070d12] border border-slate-700 text-white text-sm focus:outline-none focus:border-emerald-400" />
+            </div>
+            <div>
+              <label for="lookupSerialInput" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Serial ID Number *</label>
+              <input id="lookupSerialInput" type="text" required placeholder="e.g., A00810 or A00001"
+                class="w-full px-4 py-3 rounded-xl bg-[#070d12] border border-slate-700 text-white font-mono uppercase text-sm focus:outline-none focus:border-emerald-400" />
+            </div>
+            <button type="submit" class="w-full py-3 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-orbitron font-bold text-sm uppercase tracking-wider transition">
+              Retrieve ID Card
+            </button>
+          </form>
+
+          <!-- Quick Directory of Registered Serials -->
+          <div class="pt-4 border-t border-slate-800">
+            <div class="text-xs font-semibold text-slate-400 mb-2">Recent Registered Serials (Click to Autofill):</div>
+            <div id="recentSerialChips" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Lookup Result Display -->
+        <div class="lg:col-span-7 rounded-2xl bg-[#0e1821] border border-slate-800 p-6 min-h-[380px] flex flex-col items-center justify-center">
+          <div id="lookupResultPlaceholder" class="text-center space-y-2 max-w-sm">
+            <div class="text-emerald-400 font-orbitron text-sm font-bold">Awaiting Query</div>
+            <p class="text-xs text-slate-400">Submit a matching Member Name and Serial Number to display both front and back credentials.</p>
+          </div>
+          <div id="lookupResultCards" class="hidden w-full flex flex-col items-center space-y-5">
+            <div class="flex flex-wrap items-center justify-center gap-6">
+              <div id="lookupFrontCard"></div>
+              <div id="lookupBackCard"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-[#060b0f] py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div>© 2026 Oscorp Industries — Cross-Species Genetics &amp; Bio-Engineering Portal.</div>
+      <div class="font-mono text-emerald-500/80">SERIAL PROTOCOL: A00001 → Z99999 • QR VERIFIED • SINGLE-OWNER LOCK</div>
+    </div>
+  </footer>
+
+  <!-- ==================== CHARACTER DOSSIER MODAL ==================== -->
+  <div id="characterModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeModalOnBackdrop(event, 'characterModal')">
+    <div class="bg-[#0e1821] border border-emerald-500/40 rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl">
+      <div id="characterModalContent"></div>
+    </div>
+  </div>
+
+  <!-- ==================== LOGIN / OWNER AUTH MODAL ==================== -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeModalOnBackdrop(event, 'authModal')">
+    <div class="bg-[#0e1821] border border-emerald-500/40 rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-widest text-emerald-400">Oscorp Security Gate</span>
+          <h3 class="font-orbitron text-xl font-bold text-white">Portal Authentication</h3>
+        </div>
+        <button onclick="hideModal('authModal')" class="text-slate-400 hover:text-white text-xl leading-none">&times;</button>
+      </div>
+
+      <!-- Single-Owner Exclusivity Status Banner -->
+      <div id="ownerLockModalBanner" class="rounded-xl p-3.5 text-xs border"></div>
+
+      <!-- Quick Role Presets -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <button id="presetOwnerBtn" type="button" onclick="fillAuthPreset('owner')" class="p-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-left transition">
+          <div class="text-xs font-bold text-amber-300">Owner Account</div>
+          <div class="text-[10px] text-slate-300">Single-Owner Lock</div>
+        </button>
+        <button type="button" onclick="fillAuthPreset('member')" class="p-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-left transition">
+          <div class="text-xs font-bold text-emerald-300">Member Account</div>
+          <div class="text-[10px] text-slate-300">Create IDs + Browse</div>
+        </button>
+      </div>
+
+      <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
+          <input id="authNameInput" type="text" required placeholder="Enter your name"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-[#070d12] border border-slate-700 text-sm text-white focus:border-emerald-400 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+          <input id="authEmailInput" type="email" required placeholder="user@oscorp.com"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-[#070d12] border border-slate-700 text-sm text-white focus:border-emerald-400 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+          <input id="authPassInput" type="password" required placeholder="••••••••"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-[#070d12] border border-slate-700 text-sm text-white focus:border-emerald-400 focus:outline-none" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-orbitron font-bold text-sm uppercase tracking-wider transition">
+          Sign In to Oscorp
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== QR CODE SCAN / DIGITAL ID VIEWER MODAL ==================== -->
+  <div id="qrScanModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-4" onclick="closeModalOnBackdrop(event, 'qrScanModal')">
+    <div class="bg-[#0e1821] border-2 border-emerald-400 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-widest text-emerald-400">QR Credential Verified</span>
+            <h3 class="font-orbitron text-lg font-bold text-white">Oscorp Official Personnel ID</h3>
+          </div>
+        </div>
+        <button onclick="hideModal('qrScanModal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div id="qrScanModalBody" class="flex flex-col items-center space-y-4"></div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== CONFIGURATION & STORAGE KEYS ====================
+    const OWNER_EMAIL = 'owner@oscorp.com';
+    const DEFAULT_OWNER_NAME = 'Jakaria Amir';
+    const STORAGE_KEYS = {
+      USER: 'oscorp_current_user_v1',
+      OWNER_LOCK: 'oscorp_owner_lock_v1',
+      MEMBERS: 'oscorp_members_v1',
+      SERIAL_INDEX: 'oscorp_serial_index_v1',
+      PRODUCTS: 'oscorp_products_v1',
+      CHAR_PHOTOS: 'oscorp_character_photos_v1'
+    };
+
+    // ==================== SINGLE-OWNER EXCLUSIVITY LOCK ENGINE ====================
+    function generateOwnerSessionToken() {
+      return 'OWN-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 10).toUpperCase();
+    }
+
+    function getOwnerLock() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.OWNER_LOCK)) || null;
+      } catch {
+        return null;
+      }
+    }
+
+    function setOwnerLock(lockObj) {
+      if (!lockObj) {
+        localStorage.removeItem(STORAGE_KEYS.OWNER_LOCK);
+      } else {
+        localStorage.setItem(STORAGE_KEYS.OWNER_LOCK, JSON.stringify(lockObj));
+      }
+    }
+
+    function getCurrentUser() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.USER)) || null;
+      } catch {
+        return null;
+      }
+    }
+
+    function setCurrentUser(user) {
+      if (!user) {
+        localStorage.removeItem(STORAGE_KEYS.USER);
+      } else {
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+      }
+    }
+
+    // Automatically initialize the user as the exclusive Website Owner on first visit
+    function ensureInitialExclusiveOwnerSession() {
+      const existingUser = getCurrentUser();
+      const existingLock = getOwnerLock();
+
+      if (!existingUser && !existingLock) {
+        const token = generateOwnerSessionToken();
+        const ownerUser = {
+          name: DEFAULT_OWNER_NAME,
+          email: OWNER_EMAIL,
+          role: 'OWNER',
+          ownerSessionToken: token
+        };
+        setOwnerLock({
+          ownerClaimed: true,
+          ownerEmail: OWNER_EMAIL,
+          ownerName: DEFAULT_OWNER_NAME,
+          ownerSessionToken: token,
+          claimedAt: new Date().toISOString()
+        });
+        setCurrentUser(ownerUser);
+        return;
+      }
+
+      // Reconcile if user is signed in as Owner so lock token stays consistent
+      if (existingUser && existingUser.role === 'OWNER') {
+        if (!existingLock) {
+          const token = existingUser.ownerSessionToken || generateOwnerSessionToken();
+          existingUser.ownerSessionToken = token;
+          setCurrentUser(existingUser);
+          setOwnerLock({
+            ownerClaimed: true,
+            ownerEmail: existingUser.email,
+            ownerName: existingUser.name,
+            ownerSessionToken: token,
+            claimedAt: new Date().toISOString()
+          });
+        } else if (existingLock.ownerSessionToken !== existingUser.ownerSessionToken) {
+          // Another owner already holds the single-owner lock -> demote duplicate session
+          const demoted = { name: existingUser.name, email: existingUser.email, role: 'MEMBER' };
+          setCurrentUser(demoted);
+        }
+      }
+    }
+
+    function isOwner() {
+      const user = getCurrentUser();
+      const lock = getOwnerLock();
+      return Boolean(
+        user &&
+        user.role === 'OWNER' &&
+        user.email.toLowerCase() === OWNER_EMAIL &&
+        lock &&
+        lock.ownerClaimed === true &&
+        lock.ownerSessionToken &&
+        user.ownerSessionToken === lock.ownerSessionToken
+      );
+    }
+
+    function isAnotherOwnerLockedOut() {
+      const lock = getOwnerLock();
+      return Boolean(lock && lock.ownerClaimed === true && !isOwner());
+    }
+
+    // ==================== PORTRAIT GENERATOR FOR CHARACTERS & SAMPLE ID ====================
+    function createStylizedPortraitDataUrl({ skin = '#f1c6a7', hair = '#261a14', bg1 = '#1e293b', bg2 = '#0f172a', outfit = '#1e293b', glasses = false, beard = false, badge = '' }) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${bg1}"/>
+              <stop offset="100%" stop-color="${bg2}"/>
+            </linearGradient>
+          </defs>
+          <rect width="240" height="240" fill="url(#bg)"/>
+          <circle cx="120" cy="96" r="44" fill="${skin}"/>
+          <path d="M74 92 C74 52, 166 52, 166 92 C162 66, 78 66, 74 92 Z" fill="${hair}"/>
+          <path d="M76 88 Q95 54 126 60 Q158 55 164 88 Q150 72 120 74 Q90 72 76 88 Z" fill="${hair}"/>
+          <ellipse cx="104" cy="96" rx="4.5" ry="3.5" fill="#1a1a1a"/>
+          <ellipse cx="136" cy="96" rx="4.5" ry="3.5" fill="#1a1a1a"/>
+          <path d="M111 116 Q120 122 129 116" stroke="#8c5346" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          ${glasses ? `<rect x="89" y="88" width="26" height="16" rx="3" fill="none" stroke="#111" stroke-width="2.5"/><rect x="125" y="88" width="26" height="16" rx="3" fill="none" stroke="#111" stroke-width="2.5"/><line x1="115" y1="95" x2="125" y2="95" stroke="#111" stroke-width="2.5"/>` : ''}
+          ${beard ? `<path d="M84 106 Q120 144 156 106 Q148 136 120 138 Q92 136 84 106 Z" fill="${hair}" opacity="0.65"/>` : ''}
+          <rect x="104" y="135" width="32" height="26" fill="${skin}"/>
+          <path d="M46 240 C52 175, 188 175, 194 240 Z" fill="${outfit}"/>
+          <polygon points="104,160 120,192 136,160" fill="#f8fafc"/>
+          ${badge ? `<text x="120" y="226" font-family="monospace" font-size="13" font-weight="bold" fill="#00d27a" text-anchor="middle">${badge}</text>` : ''}
+        </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg.trim());
+    }
+
+    // ==================== THE AMAZING SPIDER-MAN CHARACTERS ARCHIVE ====================
+    const TASM_CHARACTERS = [
+      {
+        id: 'peter-parker',
+        name: 'Peter Parker / Spider-Man',
+        actor: 'Andrew Garfield',
+        role: 'Oscorp Intern & Vigilante Hero',
+        affiliation: 'Midtown Science High / Oscorp Genetics Lab',
+        status: 'Active',
+        image: 'IMG_2ec6c0e8-aebc-4351-9b0f-462f94d720c5.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#f2cbb0', hair: '#3b2618', bg1: '#d9dfe6', bg2: '#b8c2cc', outfit: '#181c24' }),
+        bio: 'A brilliant yet outsider high school student in Queens whose life transforms after sneaking into Oscorp Tower and being bitten by a genetically modified cross-species spider. Utilizing Oscorp bio-cable technology, Peter engineered mechanical web-shooters to protect New York City as Spider-Man.'
+      },
+      {
+        id: 'gwen-stacy',
+        name: 'Gwen Stacy',
+        actor: 'Emma Stone',
+        role: 'Head Intern at Oscorp Industries',
+        affiliation: 'Oscorp Cross-Species Genetics',
+        status: 'Cleared Personnel',
+        image: 'IMG_49d0b91d-8b47-41f9-8927-52be0efd14bb.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#f7d5be', hair: '#e6c36a', bg1: '#0f2942', bg2: '#091929', outfit: '#0284c7' }),
+        bio: 'Valedictorian at Midtown Science High and Dr. Curt Connors’ chief laboratory intern at Oscorp Industries. Gwen plays a pivotal role in synthesizing the antidote to the Lizard’s cross-species mutagen inside Oscorp Tower.'
+      },
+      {
+        id: 'curt-connors',
+        name: 'Dr. Curt Connors / The Lizard',
+        actor: 'Rhys Ifans',
+        role: 'Lead Cross-Species Geneticist',
+        affiliation: 'Oscorp Industries',
+        status: 'Subject Mutated',
+        image: 'IMG_c41ac405-d32d-4c28-8d3e-13072ccec7be.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#ecc3a8', hair: '#b89458', bg1: '#064e3b', bg2: '#022c22', outfit: '#f1f5f9', glasses: true }),
+        bio: 'Former research partner of Richard Parker and head scientist of Oscorp’s cross-species genetics division. Driven to regenerate his missing right arm—and pressured by Dr. Rajit Ratha—Connors tests an unstable reptile serum on himself, mutating into the superhuman Lizard.'
+      },
+      {
+        id: 'max-dillon',
+        name: 'Max Dillon / Electro',
+        actor: 'Jamie Foxx',
+        role: 'Senior Electrical Engineer',
+        affiliation: 'Oscorp Power Grid Division',
+        status: 'High-Voltage Anomaly',
+        image: 'IMG_8eb66ffe-7aa2-4ba1-8ec6-7c9dbd8fc9a9.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#8d5b3c', hair: '#18181b', bg1: '#1d4ed8', bg2: '#090d16', outfit: '#1e3a8a', glasses: true }),
+        bio: 'An overlooked electrical engineer who designed Oscorp’s New York power grid. After falling into a tank of genetically engineered electric eels during an after-hours repair, Max transforms into Electro, a living capacitor capable of absorbing and weaponizing city-wide electricity.'
+      },
+      {
+        id: 'harry-osborn',
+        name: 'Harry Osborn / Green Goblin',
+        actor: 'Dane DeHaan',
+        role: 'CEO of Oscorp Industries',
+        affiliation: 'Oscorp Executive Board',
+        status: 'Restricted Executive',
+        image: 'IMG_fcdd6676-d6fe-4409-83bd-e8f29d7c9890.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#edd0be', hair: '#59422f', bg1: '#14532d', bg2: '#052e16', outfit: '#111827' }),
+        bio: 'Childhood friend of Peter Parker who inherits control of Oscorp Industries following Norman Osborn’s death. Afflicted by the hereditary retroviral hyperplasia, Harry turns to Oscorp’s secret Special Projects vault and spider venom, becoming the Green Goblin.'
+      },
+      {
+        id: 'norman-osborn',
+        name: 'Norman Osborn',
+        actor: 'Chris Cooper',
+        role: 'Founder of Oscorp Industries',
+        affiliation: 'Oscorp Executive Founder',
+        status: 'Deceased',
+        image: 'IMG_d8a53f6d-891f-4250-bb1c-e73a4d0f3be4.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#e5bfa7', hair: '#94a3b8', bg1: '#1f2937', bg2: '#030712', outfit: '#0f172a' }),
+        bio: 'The visionary industrialist and founder of Oscorp Industries. Suffering from a terminal genetic illness, Norman secretly funded cross-species regeneration research to save his own life before passing leadership of the empire to his son Harry.'
+      },
+      {
+        id: 'rajit-ratha',
+        name: 'Dr. Rajit Ratha',
+        actor: 'Irrfan Khan',
+        role: 'Oscorp Executive Director',
+        affiliation: 'Oscorp Corporate Management',
+        status: 'Executive',
+        image: 'Rajit_Ratha_%28Earth-120703%29_from_The_Amazing_Spider-Man_%282012_film%29_001.webp',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#b9835a', hair: '#1c1917', bg1: '#312e81', bg2: '#0f172a', outfit: '#1e293b' }),
+        bio: 'A ruthless Oscorp executive representing Norman Osborn’s interests. Ratha demands that Dr. Curt Connors immediately begin human trials of the cross-species serum at a Veterans Hospital, directly triggering the Lizard crisis.'
+      },
+      {
+        id: 'george-stacy',
+        name: 'Captain George Stacy',
+        actor: 'Denis Leary',
+        role: 'NYPD Police Captain',
+        affiliation: 'New York City Police Department',
+        status: 'Fallen Officer',
+        image: 'IMG_11d2a7d3-90be-4a61-9774-a89635903f56.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#ecc2a6', hair: '#cbd5e1', bg1: '#1e3a8a', bg2: '#0f172a', outfit: '#172554' }),
+        bio: 'Gwen Stacy’s father and a decorated NYPD Captain who initially leads the citywide manhunt for Spider-Man before discovering Peter’s identity and assisting him during the battle atop Oscorp Tower.'
+      },
+      {
+        id: 'may-parker',
+        name: 'May Parker',
+        actor: 'Sally Field',
+        role: 'Peter Parker’s Aunt & Guardian',
+        affiliation: 'Parker Residence, Queens',
+        status: 'Civilian',
+        image: 'IMG_b93abd11-1ef7-414b-b996-ec66b93bdcf1.jpg',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#f0cbb3', hair: '#78350f', bg1: '#4c1d95', bg2: '#1e1b4b', outfit: '#312e81' }),
+        bio: 'Peter Parker’s devoted aunt who raises him alongside Uncle Ben after Richard and Mary Parker disappear. She provides steady moral grounding while Peter balances everyday life and responsibility.'
+      },
+      {
+        id: 'richard-parker',
+        name: 'Richard Parker',
+        actor: 'Campbell Scott',
+        role: 'Former Oscorp Geneticist',
+        affiliation: 'Oscorp Industries (Former)',
+        status: 'Deceased',
+        image: 'Richard_Parker.webp',
+        fallbackImage: createStylizedPortraitDataUrl({ skin: '#ecc2a6', hair: '#64748b', bg1: '#0f766e', bg2: '#042f2e', outfit: '#1e293b', glasses: true }),
+        bio: 'Peter Parker’s father and a brilliant Oscorp scientist who co-developed the cross-species genetic algorithm with Dr. Curt Connors. Realizing Norman Osborn intended to weaponize the research, Richard encoded his own DNA into the formula and fled to protect the world.'
+      }
+    ];
+
+    // ==================== CHARACTER CUSTOM PHOTO STORAGE (OWNER-ONLY) ====================
+    function getCharacterPhotoOverrides() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.CHAR_PHOTOS)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveCharacterPhotoOverrides(overrides) {
+      localStorage.setItem(STORAGE_KEYS.CHAR_PHOTOS, JSON.stringify(overrides));
+    }
+
+    function getCharacterImage(char) {
+      const overrides = getCharacterPhotoOverrides();
+      return overrides[char.id] || char.image;
+    }
+
+    // ==================== DEFAULT STORE PRODUCTS ====================
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 'prod-1',
+        name: 'Oscorp Synthetic Bio-Cable Spool',
+        price: 1250.00,
+        category: 'Bio-Cable & Polymer',
+        description: 'Industrial-grade tensile polymer strand engineered at Oscorp Tower. Supports 1,400 lbs per millimeter.',
+        image: createStylizedPortraitDataUrl({ skin: '#00d27a', hair: '#064e3b', bg1: '#065f46', bg2: '#022c22', outfit: '#047857', badge: 'BIO-CABLE' })
+      },
+      {
+        id: 'prod-2',
+        name: 'Cross-Species Neural Interface',
+        price: 3400.00,
+        category: 'Neural Prosthetics',
+        description: 'Precision synaptic telemetry headset developed in Dr. Curt Connors’ Genetics Laboratory.',
+        image: createStylizedPortraitDataUrl({ skin: '#38bdf8', hair: '#0c4a6e', bg1: '#0369a1', bg2: '#082f49', outfit: '#0284c7', badge: 'NEURAL-OS' })
+      },
+      {
+        id: 'prod-3',
+        name: 'Oscorp Cleanroom Diagnostics Kit',
+        price: 680.00,
+        category: 'Lab Equipment',
+        description: 'Portable cellular sequence analyzer for Level-4 Oscorp Genetics Laboratory personnel.',
+        image: createStylizedPortraitDataUrl({ skin: '#fbbf24', hair: '#78350f', bg1: '#92400e', bg2: '#451a03', outfit: '#b45309', badge: 'LAB-KIT' })
+      }
+    ];
+
+    // ==================== 7. AUTOMATIC SEQUENTIAL SERIAL NUMBER ENGINE ====================
+    // Starts at index 0 -> A00001 ... A99999 (index 99,998), then index 99,999 -> B00001, etc.
+    function formatSerialFromIndex(index) {
+      const perLetter = 99999; // 00001 to 99999 per letter
+      const letterOffset = Math.floor(index / perLetter);
+      const numberPart = (index % perLetter) + 1;
+      const letterChar = String.fromCharCode(65 + (letterOffset % 26)); // A..Z
+      return letterChar + String(numberPart).padStart(5, '0');
+    }
+
+    function getSerialIndex() {
+      const raw = localStorage.getItem(STORAGE_KEYS.SERIAL_INDEX);
+      return raw !== null ? parseInt(raw, 10) : 0;
+    }
+
+    function peekNextSerial() {
+      return formatSerialFromIndex(getSerialIndex());
+    }
+
+    function consumeAndIncrementSerial() {
+      const currentIdx = getSerialIndex();
+      const assignedSerial = formatSerialFromIndex(currentIdx);
+      localStorage.setItem(STORAGE_KEYS.SERIAL_INDEX, String(currentIdx + 1));
+      return assignedSerial;
+    }
+
+    // ==================== STORAGE HELPERS ====================
+    function getMembers() {
+      let list = [];
+      try {
+        list = JSON.parse(localStorage.getItem(STORAGE_KEYS.MEMBERS)) || [];
+      } catch {
+        list = [];
+      }
+      // Ensure Reference Sample Member (Peter Parker - A00810) is always searchable
+      if (!list.some(m => m.serial === 'A00810')) {
+        list.unshift({
+          serial: 'A00810',
+          name: 'Peter Parker',
+          division: 'GENETICS LABORATORY',
+          photo: 'IMG_2ec6c0e8-aebc-4351-9b0f-462f94d720c5.jpg',
+          fallbackPhoto: createStylizedPortraitDataUrl({ skin: '#f2cbb0', hair: '#3b2618', bg1: '#e2e8f0', bg2: '#cbd5e1', outfit: '#111827' }),
+          issuedBy: 'system@oscorp.com',
+          issuedAt: '2026-01-15T09:00:00.000Z'
+        });
+        localStorage.setItem(STORAGE_KEYS.MEMBERS, JSON.stringify(list));
+      }
+      return list;
+    }
+
+    function saveMember(member) {
+      const list = getMembers();
+      list.push(member);
+      localStorage.setItem(STORAGE_KEYS.MEMBERS, JSON.stringify(list));
+    }
+
+    function getProducts() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.PRODUCTS));
+        if (saved && Array.isArray(saved)) return saved;
+      } catch {}
+      localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(DEFAULT_PRODUCTS));
+      return DEFAULT_PRODUCTS;
+    }
+
+    function saveProducts(products) {
+      localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
+    }
+
+    // ==================== TOAST NOTIFICATIONS ====================
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const colors = type === 'error'
+        ? 'bg-rose-950/95 border-rose-500 text-rose-200'
+        : type === 'warning'
+        ? 'bg-amber-950/95 border-amber-400 text-amber-200'
+        : 'bg-emerald-950/95 border-emerald-400 text-emerald-200';
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-xl text-xs sm:text-sm font-medium max-w-sm transition-all duration-300 ${colors}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3600);
+    }
+
+    // ==================== NAVIGATION ====================
+    function navigateTo(sectionName) {
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
+      const target = document.getElementById(`section-${sectionName}`);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-nav') === sectionName);
+      });
+
+      if (sectionName === 'membership') {
+        syncMembershipGate();
+      } else if (sectionName === 'store') {
+        renderStoreSection();
+      } else if (sectionName === 'lookup') {
+        renderRecentSerialChips();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleBeAMemberClick() {
+      navigateTo('membership');
+      if (!getCurrentUser()) {
+        showToast('Please log in to create your Oscorp Membership ID.', 'warning');
+      }
+    }
+
+    // ==================== AUTHENTICATION & SINGLE-OWNER LOCK UI ====================
+    function renderAuthHeader() {
+      const area = document.getElementById('authHeaderArea');
+      const user = getCurrentUser();
+      const homeClearance = document.getElementById('homeClearanceLabel');
+
+      if (!user) {
+        const lockNote = isAnotherOwnerLockedOut() ? 'Owner Slot Locked' : 'Guest Mode';
+        if (homeClearance) homeClearance.textContent = lockNote;
+        area.innerHTML = `
+          <button onclick="openAuthModal('member')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition">
+            Login
+          </button>
+        `;
+      } else if (isOwner()) {
+        if (homeClearance) homeClearance.textContent = 'Exclusive Owner Active';
+        area.innerHTML = `
+          <div class="hidden sm:flex flex-col text-right">
+            <span class="text-xs font-bold text-white leading-tight">${escapeHtml(user.name)}</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Exclusive Owner • Locked</span>
+          </div>
+          <button onclick="logoutUser()" title="Release Single-Owner Lock & Sign Out" class="px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-200 text-xs font-semibold transition">
+            Release Owner Lock
+          </button>
+        `;
+      } else {
+        if (homeClearance) homeClearance.textContent = 'Member Access';
+        area.innerHTML = `
+          <div class="hidden sm:flex flex-col text-right">
+            <span class="text-xs font-bold text-white leading-tight">${escapeHtml(user.name)}</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Member</span>
+          </div>
+          <button onclick="logoutUser()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition">
+            Logout
+          </button>
+        `;
+      }
+    }
+
+    function openAuthModal(defaultPreset = 'member') {
+      updateOwnerLockModalUI();
+      fillAuthPreset(defaultPreset);
+      document.getElementById('authModal').classList.remove('hidden');
+    }
+
+    function updateOwnerLockModalUI() {
+      const banner = document.getElementById('ownerLockModalBanner');
+      const ownerBtn = document.getElementById('presetOwnerBtn');
+      const lock = getOwnerLock();
+
+      if (isOwner()) {
+        banner.className = 'rounded-xl p-3.5 text-xs border bg-amber-500/10 border-amber-400/40 text-amber-200';
+        banner.innerHTML = `<strong>Single-Owner Lock Held by You:</strong> You are currently signed in as the sole Owner (${escapeHtml(lock.ownerEmail)}). No other session can log in as Owner until you click <em>Release Owner Lock</em>.`;
+        ownerBtn.disabled = false;
+        ownerBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else if (lock && lock.ownerClaimed) {
+        banner.className = 'rounded-xl p-3.5 text-xs border bg-rose-950/70 border-rose-500/50 text-rose-200';
+        banner.innerHTML = `<strong>Single-Owner Lock Active:</strong> An Owner (<strong>${escapeHtml(lock.ownerName || 'Website Owner')}</strong>) is already logged in. Per Oscorp security policy, only one Owner is permitted at a time—others may sign in as <strong>Member</strong> only.`;
+        ownerBtn.disabled = true;
+        ownerBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        banner.className = 'rounded-xl p-3.5 text-xs border bg-emerald-500/10 border-emerald-400/40 text-emerald-200';
+        banner.innerHTML = `<strong>Owner Slot Available:</strong> Signing in with <code>${OWNER_EMAIL}</code> will claim the exclusive Single-Owner Lock.`;
+        ownerBtn.disabled = false;
+        ownerBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function fillAuthPreset(role) {
+      if (role === 'owner') {
+        if (isAnotherOwnerLockedOut()) {
+          showToast('Access Denied: Single-Owner Lock is already held by the active Owner.', 'error');
+          role = 'member';
+        } else {
+          document.getElementById('authNameInput').value = DEFAULT_OWNER_NAME;
+          document.getElementById('authEmailInput').value = OWNER_EMAIL;
+          document.getElementById('authPassInput').value = 'oscorp2026';
+          return;
+        }
+      }
+      document.getElementById('authNameInput').value = 'Gwen Stacy';
+      document.getElementById('authEmailInput').value = 'gwen.stacy@oscorp.com';
+      document.getElementById('authPassInput').value = 'genetics123';
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('authNameInput').value.trim();
+      const email = document.getElementById('authEmailInput').value.trim().toLowerCase();
+      if (!name || !email) return;
+
+      const wantsOwner = (email === OWNER_EMAIL);
+      const existingLock = getOwnerLock();
+
+      if (wantsOwner) {
+        // Enforce Single-Owner Exclusivity Rule
+        if (existingLock && existingLock.ownerClaimed && !isOwner()) {
+          showToast('Access Denied: Single-Owner Lock Active. Another session is already logged in as Owner.', 'error');
+          updateOwnerLockModalUI();
+          return;
+        }
+
+        const token = isOwner()
+          ? getCurrentUser().ownerSessionToken
+          : generateOwnerSessionToken();
+
+        setOwnerLock({
+          ownerClaimed: true,
+          ownerEmail: OWNER_EMAIL,
+          ownerName: name,
+          ownerSessionToken: token,
+          claimedAt: new Date().toISOString()
+        });
+
+        setCurrentUser({
+          name,
+          email,
+          role: 'OWNER',
+          ownerSessionToken: token
+        });
+
+        hideModal('authModal');
+        syncAllUI();
+        showToast(`Exclusive Owner Lock claimed by ${name}. Full Owner privileges active.`);
+        return;
+      }
+
+      // If current user was Owner and switches to a Member account, release the Owner lock
+      if (isOwner()) {
+        setOwnerLock(null);
+      }
+
+      setCurrentUser({
+        name,
+        email,
+        role: 'MEMBER'
+      });
+
+      hideModal('authModal');
+      syncAllUI();
+      showToast(`Signed in as ${name} (MEMBER)`);
+    }
+
+    function logoutUser() {
+      const wasOwner = isOwner();
+      if (wasOwner) {
+        setOwnerLock(null);
+      }
+      setCurrentUser(null);
+      syncAllUI();
+      showToast(wasOwner ? 'Single-Owner Lock released and signed out.' : 'Signed out of Oscorp Industries.');
+    }
+
+    function hideModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function closeModalOnBackdrop(e, id) {
+      if (e.target.id === id) hideModal(id);
+    }
+
+    // ==================== OFFICIAL OSCORP ID CARD RENDERERS (IMAGE 1 & IMAGE 2) ====================
+    function buildFrontBadgeHTML({ name, serial, photo, fallbackPhoto = '', division = 'GENETICS LABORATORY' }) {
+      const cleanSerial = (serial || 'A00001').toUpperCase();
+      const serialLettersHTML = cleanSerial.split('').map(ch => `<span>${ch}</span>`).join('');
+      const staffLettersHTML = ['S', 'T', 'A', 'F', 'F'].map(ch => `<span>${ch}</span>`).join('');
+      const safeName = escapeHtml(name || 'YOUR NAME');
+      const safeDiv = escapeHtml((division || 'GENETICS LABORATORY').toUpperCase());
+      const fallbackAttr = fallbackPhoto ? `onerror="this.onerror=null;this.src='${fallbackPhoto}';"` : '';
+
+      return `
+        <div class="oscorp-id-front">
+          <!-- Header: OSCORP INDUSTRIES -->
+          <div class="text-center pt-1">
+            <div class="font-orbitron font-bold tracking-[0.08em] text-[28px] leading-none text-black">OSCORP</div>
+            <div class="text-[9.5px] font-bold tracking-[0.42em] text-black mt-1 pl-2">INDUSTRIES</div>
+          </div>
+
+          <!-- Center Row: Vertical STAFF | Square Photo | Vertical No. + Serial -->
+          <div class="flex items-stretch justify-between my-3 px-1">
+            <!-- Left Vertical STAFF -->
+            <div class="vertical-letters font-serif-badge font-bold text-[22px] text-black py-1 w-8">
+              ${staffLettersHTML}
+            </div>
+
+            <!-- Center Framed Portrait -->
+            <div class="w-[152px] h-[166px] border-[2.5px] border-black bg-slate-100 overflow-hidden flex items-center justify-center">
+              ${photo
+                ? `<img src="${photo}" ${fallbackAttr} alt="${safeName}" class="w-full h-full object-cover object-top" />`
+                : `<div class="text-[11px] font-semibold text-slate-500 text-center px-2">UPLOAD PHOTO</div>`
+              }
+            </div>
+
+            <!-- Right Vertical No. & Sequential Serial -->
+            <div class="flex flex-col items-center justify-between py-1 w-9">
+              <span class="font-serif-badge font-bold text-[11px] text-black">No.</span>
+              <div class="vertical-letters font-serif-badge font-bold text-[15px] text-black flex-1 pt-1.5">
+                ${serialLettersHTML}
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Name & Division -->
+          <div class="text-center pb-1">
+            <div class="font-serif-badge font-bold text-[16px] text-black tracking-tight truncate px-1">${safeName}</div>
+            <div class="border-t-[1.8px] border-black my-1.5 mx-1"></div>
+            <div class="font-serif-badge font-bold text-[11.5px] tracking-[0.06em] text-black">${safeDiv}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildVerificationUrl(member) {
+      const base = window.location.href.split('?')[0].split('#')[0];
+      const params = new URLSearchParams({
+        id: member.serial,
+        name: member.name
+      });
+      return `${base}?${params.toString()}`;
+    }
+
+    function renderBackBadgeInto(containerEl, member) {
+      const cleanSerial = (member.serial || 'A00001').toUpperCase();
+      const qrBoxId = 'qr_' + cleanSerial + '_' + Math.random().toString(36).slice(2, 7);
+
+      containerEl.innerHTML = `
+        <div class="oscorp-id-back">
+          <!-- Subtle Geometric Hex Background Accent -->
+          <svg class="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none" viewBox="0 0 300 480" fill="none">
+            <polygon points="70,20 150,65 150,155 70,200 -10,155 -10,65" stroke="#000" stroke-width="18"/>
+            <polygon points="150,240 230,285 230,375 150,420 70,375 70,285" stroke="#000" stroke-width="18"/>
+          </svg>
+
+          <!-- Left Column: STAFF ID, Vertical Barcode, Automatic QR Code -->
+          <div class="absolute left-5 top-16 bottom-6 w-[108px] flex flex-col justify-between z-10">
+            <div>
+              <div class="text-[11px] font-bold tracking-wider text-black">STAFF ID</div>
+              <div class="font-sans font-extrabold text-[18px] text-black tracking-tight border-b border-black pb-1.5">${cleanSerial}</div>
+            </div>
+
+            <div class="my-auto py-2">
+              <div class="barcode-stripes"></div>
+            </div>
+
+            <!-- Scannable QR Code -->
+            <div class="bg-white p-1 border border-black/20 inline-block w-[74px] h-[74px]" id="${qrBoxId}"></div>
+          </div>
+
+          <!-- Center Rotated OSCORP INDUSTRIES & Legal Property Notice -->
+          <div class="absolute left-[132px] top-6 bottom-6 w-[88px] flex items-center justify-center z-10">
+            <div class="vertical-text-cw flex items-center gap-4">
+              <div class="border-b-2 border-black pb-1">
+                <div class="font-orbitron font-bold text-[24px] tracking-[0.08em] leading-none text-black">OSCORP</div>
+                <div class="text-[8px] font-bold tracking-[0.38em] text-black mt-0.5">INDUSTRIES</div>
+              </div>
+              <p class="text-[7.8px] leading-[1.35] font-medium text-black max-h-[210px]">
+                This identification card is the property of Oscorp Industries. The person depicted on this card is an authorized employee and must be presented upon request.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Magnetic Stripe -->
+          <div class="absolute right-8 top-0 bottom-0 w-[34px] bg-[#0b0b0b] z-10"></div>
+
+          <!-- Far Right Rotated Authorization Text -->
+          <div class="absolute right-2 top-0 bottom-0 flex items-center justify-center z-10">
+            <span class="vertical-text-cw text-[8.5px] font-bold tracking-[0.14em] text-black">
+              "FOR AUTHORIZED PERSONNEL ONLY"
+            </span>
+          </div>
+        </div>
+      `;
+
+      const qrEl = document.getElementById(qrBoxId);
+      if (qrEl && typeof QRCode !== 'undefined') {
+        const verifyUrl = buildVerificationUrl(member);
+        new QRCode(qrEl, {
+          text: verifyUrl,
+          width: 64,
+          height: 64,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      }
+    }
+
+    // ==================== CHARACTERS GRID & OWNER-ONLY PHOTO UPLOAD ====================
+    function renderCharactersGrid() {
+      const grid = document.getElementById('charactersGrid');
+      const query = (document.getElementById('characterSearchInput')?.value || '').trim().toLowerCase();
+      const filtered = TASM_CHARACTERS.filter(c =>
+        c.name.toLowerCase().includes(query) ||
+        c.actor.toLowerCase().includes(query) ||
+        c.role.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No characters matched "${escapeHtml(query)}".</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(char => {
+        const imgSrc = getCharacterImage(char);
+        return `
+          <div onclick="openCharacterModal('${char.id}')" class="cursor-pointer group rounded-2xl bg-[#0e1821] border border-slate-800 hover:border-emerald-400/60 overflow-hidden shadow-lg transition-all duration-300 flex flex-col">
+            <div class="aspect-square bg-slate-900 overflow-hidden relative">
+              <img src="${imgSrc}" onerror="this.onerror=null;this.src='${char.fallbackImage}';" alt="${escapeHtml(char.name)}"
+                class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
+              <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-sm border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+                ${escapeHtml(char.status)}
+              </span>
+            </div>
+            <div class="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-orbitron font-bold text-white text-base group-hover:text-emerald-400 transition">${escapeHtml(char.name)}</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Portrayed by ${escapeHtml(char.actor)}</p>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                <span class="text-slate-400 truncate max-w-[170px]">${escapeHtml(char.role)}</span>
+                <span class="text-emerald-400 font-semibold">Dossier →</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openCharacterModal(charId) {
+      const char = TASM_CHARACTERS.find(c => c.id === charId);
+      if (!char) return;
+
+      const overrides = getCharacterPhotoOverrides();
+      const hasCustomPhoto = Boolean(overrides[char.id]);
+      const imgSrc = getCharacterImage(char);
+      const ownerActive = isOwner();
+
+      // Owner-Only Photo Control Box (Strict Single-Owner Enforcement)
+      const photoControlHTML = ownerActive
+        ? `
+          <div class="mt-4 pt-3 border-t border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Exclusive Owner Photo Control</span>
+              ${hasCustomPhoto ? `<button type="button" onclick="resetCharacterPhoto('${char.id}')" class="text-[11px] text-rose-400 hover:text-rose-300 underline">Reset Photo</button>` : ''}
+            </div>
+            <label class="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-200 text-xs font-semibold cursor-pointer transition">
+              <span>Upload / Replace Character Photo</span>
+              <input type="file" accept="image/*" class="hidden" onchange="handleCharacterPhotoUpload(event, '${char.id}')" />
+            </label>
+          </div>
+        `
+        : `
+          <div class="mt-4 pt-3 border-t border-slate-800">
+            <div class="px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400">
+              <span class="text-amber-400 font-semibold">Owner-Locked Portrait:</span> Only the exclusive Website Owner can upload or replace character photos.
+            </div>
+          </div>
+        `;
+
+      document.getElementById('characterModalContent').innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-12">
+          <div class="md:col-span-5 bg-slate-950 p-4 flex flex-col justify-between">
+            <div class="aspect-square rounded-xl overflow-hidden border border-slate-800 bg-slate-900">
+              <img src="${imgSrc}" onerror="this.onerror=null;this.src='${char.fallbackImage}';" alt="${escapeHtml(char.name)}"
+                class="w-full h-full object-cover object-top" />
+            </div>
+            ${photoControlHTML}
+          </div>
+          <div class="md:col-span-7 p-6 space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-widest text-emerald-400">Oscorp Personnel Dossier</span>
+                <h3 class="font-orbitron text-2xl font-bold text-white mt-0.5">${escapeHtml(char.name)}</h3>
+                <p class="text-xs text-slate-400">Portrayed by <strong class="text-slate-200">${escapeHtml(char.actor)}</strong></p>
+              </div>
+              <button onclick="hideModal('characterModal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs bg-[#070d12] p-3.5 rounded-xl border border-slate-800">
+              <div>
+                <div class="text-slate-500 uppercase text-[10px]">Classification</div>
+                <div class="text-slate-200 font-semibold mt-0.5">${escapeHtml(char.role)}</div>
+              </div>
+              <div>
+                <div class="text-slate-500 uppercase text-[10px]">Affiliation</div>
+                <div class="text-emerald-300 font-semibold mt-0.5">${escapeHtml(char.affiliation)}</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Biographical &amp; Oscorp Record</div>
+              <p class="text-sm text-slate-200 leading-relaxed">${escapeHtml(char.bio)}</p>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('characterModal').classList.remove('hidden');
+    }
+
+    function handleCharacterPhotoUpload(event, charId) {
+      if (!isOwner()) {
+        showToast('Access Denied: Only the exclusive Website Owner can modify character photos.', 'error');
+        return;
+      }
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const overrides = getCharacterPhotoOverrides();
+        overrides[charId] = ev.target.result;
+        saveCharacterPhotoOverrides(overrides);
+        renderCharactersGrid();
+        openCharacterModal(charId);
+        showToast('Character portrait updated by Exclusive Owner.');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetCharacterPhoto(charId) {
+      if (!isOwner()) {
+        showToast('Access Denied: Only the exclusive Website Owner can reset character photos.', 'error');
+        return;
+      }
+      const overrides = getCharacterPhotoOverrides();
+      delete overrides[charId];
+      saveCharacterPhotoOverrides(overrides);
+      renderCharactersGrid();
+      openCharacterModal(charId);
+      showToast('Character portrait restored to default archive image.');
+    }
+
+    // ==================== OWNER-ONLY STOREFRONT ====================
+    function renderStoreSection() {
+      const ownerActive = isOwner();
+      document.getElementById('ownerSellerPanel').classList.toggle('hidden', !ownerActive);
+      document.getElementById('nonOwnerStoreNotice').classList.toggle('hidden', ownerActive);
+
+      document.getElementById('ownerStoreBadge').innerHTML = ownerActive
+        ? `<span class="px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-300 text-xs font-bold">Exclusive Owner Seller Mode Active</span>`
+        : `<span class="px-3.5 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold">Buyer View Only (Owner Locked)</span>`;
+
+      const products = getProducts();
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = products.map(prod => `
+        <div class="rounded-2xl bg-[#0e1821] border border-slate-800 overflow-hidden flex flex-col justify-between shadow-lg">
+          <div>
+            <div class="h-44 bg-slate-900 overflow-hidden relative">
+              <img src="${prod.image}" alt="${escapeHtml(prod.name)}" class="w-full h-full object-cover" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/75 text-emerald-300 text-[10px] font-bold uppercase tracking-wider">
+                ${escapeHtml(prod.category)}
+              </span>
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-orbitron font-bold text-white text-base">${escapeHtml(prod.name)}</h3>
+                <span class="font-orbitron font-bold text-emerald-400 text-base">$${Number(prod.price).toFixed(2)}</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed">${escapeHtml(prod.description)}</p>
+            </div>
+          </div>
+          <div class="px-5 pb-5 pt-2 flex items-center gap-2">
+            <button onclick="purchaseProduct('${prod.id}')" class="flex-1 py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition">
+              Purchase Unit
+            </button>
+            ${ownerActive ? `
+              <button onclick="deleteProduct('${prod.id}')" title="Remove Listing (Owner Only)" class="py-2.5 px-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-300 text-xs font-bold transition">
+                Delete
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleAddProduct(e) {
+      e.preventDefault();
+      if (!isOwner()) {
+        showToast('Access Denied: Only the exclusive Website Owner can sell products.', 'error');
+        return;
+      }
+      const name = document.getElementById('prodName').value.trim();
+      const price = parseFloat(document.getElementById('prodPrice').value);
+      const category = document.getElementById('prodCategory').value;
+      const description = document.getElementById('prodDesc').value.trim();
+      const file = document.getElementById('prodImageInput').files?.[0];
+
+      const commitProduct = (imageUrl) => {
+        const products = getProducts();
+        products.unshift({
+          id: 'prod-' + Date.now(),
+          name,
+          price,
+          category,
+          description,
+          image: imageUrl
+        });
+        saveProducts(products);
+        e.target.reset();
+        renderStoreSection();
+        showToast(`Published "${name}" to Oscorp Bio-Tech Store.`);
+      };
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = ev => commitProduct(ev.target.result);
+        reader.readAsDataURL(file);
+      } else {
+        commitProduct(createStylizedPortraitDataUrl({ skin: '#00d27a', hair: '#064e3b', bg1: '#065f46', bg2: '#022c22', outfit: '#047857', badge: 'OSCORP' }));
+      }
+    }
+
+    function deleteProduct(id) {
+      if (!isOwner()) {
+        showToast('Access Denied: Only the exclusive Website Owner can remove products.', 'error');
+        return;
+      }
+      const products = getProducts().filter(p => p.id !== id);
+      saveProducts(products);
+      renderStoreSection();
+      showToast('Product removed from storefront.');
+    }
+
+    function purchaseProduct(id) {
+      const prod = getProducts().find(p => p.id === id);
+      if (!prod) return;
+      showToast(`Order confirmed for "${prod.name}" ($${Number(prod.price).toFixed(2)}).`);
+    }
+
+    // ==================== MEMBERSHIP REGISTRATION & AUTOMATIC QR GENERATION ====================
+    let draftUploadedPhotoDataUrl = '';
+    let lastIssuedMember = null;
+
+    function syncMembershipGate() {
+      const user = getCurrentUser();
+      const gate = document.getElementById('membershipLoginGate');
+      const formWrap = document.getElementById('membershipFormContainer');
+
+      if (!user) {
+        gate.classList.remove('hidden');
+        formWrap.classList.add('hidden');
+        return;
+      }
+
+      gate.classList.add('hidden');
+      formWrap.classList.remove('hidden');
+      document.getElementById('regLoggedUserEmail').textContent = user.email;
+      document.getElementById('regNextSerialBadge').textContent = peekNextSerial();
+
+      if (!lastIssuedMember) {
+        updateLiveDraftBadge();
+      }
+    }
+
+    function handleMemberPhotoPreview(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        draftUploadedPhotoDataUrl = ev.target.result;
+        document.getElementById('uploadThumbPreview').innerHTML = `<img src="${draftUploadedPhotoDataUrl}" class="w-full h-full object-cover object-top" />`;
+        lastIssuedMember = null;
+        updateLiveDraftBadge();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updateLiveDraftBadge() {
+      const name = document.getElementById('memberFullName')?.value.trim() || 'YOUR NAME';
+      const division = document.getElementById('memberDivision')?.value || 'GENETICS LABORATORY';
+      const nextSerial = peekNextSerial();
+
+      document.getElementById('badgePreviewStatusTag').textContent = 'Live Draft Preview';
+      document.getElementById('badgePreviewStatusTag').className = 'text-xs font-bold uppercase tracking-wider text-amber-400';
+      document.getElementById('downloadQrBtn').classList.add('hidden');
+      document.getElementById('issuedCardActions').classList.add('hidden');
+
+      const draftMember = {
+        name,
+        serial: nextSerial,
+        division,
+        photo: draftUploadedPhotoDataUrl
+      };
+
+      document.getElementById('liveFrontCardContainer').innerHTML = buildFrontBadgeHTML(draftMember);
+      renderBackBadgeInto(document.getElementById('liveBackCardContainer'), draftMember);
+    }
+
+    function handleMembershipSubmit(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user) {
+        showToast('Login is mandatory to create a membership ID.', 'error');
+        syncMembershipGate();
+        return;
+      }
+
+      if (!draftUploadedPhotoDataUrl) {
+        showToast('Please upload your photo first.', 'warning');
+        return;
+      }
+
+      const name = document.getElementById('memberFullName').value.trim();
+      const division = document.getElementById('memberDivision').value;
+      const confirmed = document.getElementById('confirmPaymentCheckbox').checked;
+
+      if (!name || !confirmed) {
+        showToast('Please enter your name and confirm the membership price.', 'warning');
+        return;
+      }
+
+      // Assign sequential serial number (A00001 -> A99999 -> B00001...)
+      const serial = consumeAndIncrementSerial();
+      const newMember = {
+        serial,
+        name,
+        division,
+        photo: draftUploadedPhotoDataUrl,
+        issuedBy: user.email,
+        issuedAt: new Date().toISOString()
+      };
+
+      saveMember(newMember);
+      lastIssuedMember = newMember;
+
+      // Update UI to display official issued front + back QR badge
+      document.getElementById('badgePreviewStatusTag').textContent = `ISSUED & QR VERIFIED • ${serial}`;
+      document.getElementById('badgePreviewStatusTag').className = 'text-xs font-bold uppercase tracking-wider text-emerald-400';
+      document.getElementById('liveFrontCardContainer').innerHTML = buildFrontBadgeHTML(newMember);
+      renderBackBadgeInto(document.getElementById('liveBackCardContainer'), newMember);
+
+      document.getElementById('downloadQrBtn').classList.remove('hidden');
+      document.getElementById('issuedCardActions').classList.remove('hidden');
+      document.getElementById('simulateScanBtn').onclick = () => openQrScanModal(newMember);
+
+      syncAllUI();
+      showToast(`Payment confirmed! Official Oscorp ID ${serial} & QR Code generated.`);
+    }
+
+    function downloadGeneratedQR() {
+      const canvas = document.querySelector('#liveBackCardContainer canvas');
+      const img = document.querySelector('#liveBackCardContainer img');
+      const dataUrl = canvas ? canvas.toDataURL('image/png') : img?.src;
+      if (!dataUrl) {
+        showToast('QR image not ready yet.', 'warning');
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `Oscorp-QR-${lastIssuedMember?.serial || 'Badge'}.png`;
+      a.click();
+    }
+
+    // ==================== ID LOOKUP SYSTEM & QR SCAN HANDLER ====================
+    function handleIdLookup(e) {
+      e.preventDefault();
+      const queryName = document.getElementById('lookupNameInput').value.trim().toLowerCase();
+      const querySerial = document.getElementById('lookupSerialInput').value.trim().toUpperCase();
+
+      const members = getMembers();
+      const found = members.find(m =>
+        m.serial.toUpperCase() === querySerial &&
+        m.name.trim().toLowerCase() === queryName
+      );
+
+      if (!found) {
+        document.getElementById('lookupResultCards').classList.add('hidden');
+        document.getElementById('lookupResultPlaceholder').classList.remove('hidden');
+        document.getElementById('lookupResultPlaceholder').innerHTML = `
+          <div class="text-rose-400 font-orbitron text-sm font-bold">No Matching Credential Found</div>
+          <p class="text-xs text-slate-400">Verify that both the exact Full Name and Serial ID Number (e.g., Peter Parker &amp; A00810) match our Oscorp registry.</p>
+        `;
+        showToast('No matching ID card found for that Name & Serial ID.', 'error');
+        return;
+      }
+
+      document.getElementById('lookupResultPlaceholder').classList.add('hidden');
+      document.getElementById('lookupResultCards').classList.remove('hidden');
+      document.getElementById('lookupFrontCard').innerHTML = buildFrontBadgeHTML(found);
+      renderBackBadgeInto(document.getElementById('lookupBackCard'), found);
+      showToast(`Credential ${found.serial} verified for ${found.name}.`);
+    }
+
+    function renderRecentSerialChips() {
+      const container = document.getElementById('recentSerialChips');
+      if (!container) return;
+      const members = getMembers().slice(-6).reverse();
+      container.innerHTML = members.map(m => `
+        <button type="button" onclick="autofillLookup('${escapeHtml(m.name)}', '${escapeHtml(m.serial)}')"
+          class="px-2.5 py-1 rounded-lg bg-[#070d12] hover:bg-emerald-500/15 border border-slate-700 hover:border-emerald-400/50 text-xs text-slate-300 transition">
+          <span class="font-mono text-emerald-400 font-bold">${escapeHtml(m.serial)}</span> • ${escapeHtml(m.name)}
+        </button>
+      `).join('');
+    }
+
+    function autofillLookup(name, serial) {
+      document.getElementById('lookupNameInput').value = name;
+      document.getElementById('lookupSerialInput').value = serial;
+      handleIdLookup(new Event('submit'));
+    }
+
+    function openQrScanModal(member) {
+      const body = document.getElementById('qrScanModalBody');
+      body.innerHTML = `
+        <p class="text-xs text-slate-300 text-center">
+          Scanned QR Credential for <strong class="text-emerald-400">${escapeHtml(member.name)}</strong> • Serial <strong class="font-mono text-white">${escapeHtml(member.serial)}</strong>
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-5">
+          ${buildFrontBadgeHTML(member)}
+          <div id="qrScanBackSlot"></div>
+        </div>
+      `;
+      renderBackBadgeInto(document.getElementById('qrScanBackSlot'), member);
+      document.getElementById('qrScanModal').classList.remove('hidden');
+    }
+
+    function checkUrlForScannedQr() {
+      const params = new URLSearchParams(window.location.search);
+      const scannedId = params.get('id');
+      if (!scannedId) return;
+
+      const members = getMembers();
+      const match = members.find(m => m.serial.toUpperCase() === scannedId.toUpperCase());
+      if (match) {
+        openQrScanModal(match);
+      } else {
+        const scannedName = params.get('name') || 'Verified Member';
+        openQrScanModal({
+          serial: scannedId.toUpperCase(),
+          name: scannedName,
+          division: 'GENETICS LABORATORY',
+          photo: ''
+        });
+      }
+    }
+
+    // ==================== GLOBAL SYNC & INITIALIZATION ====================
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function syncAllUI() {
+      renderAuthHeader();
+      const nextSerial = peekNextSerial();
+      const members = getMembers();
+
+      const homeSerialEl = document.getElementById('homeNextSerial');
+      const homeCountEl = document.getElementById('homeMemberCount');
+      const regSerialEl = document.getElementById('regNextSerialBadge');
+
+      if (homeSerialEl) homeSerialEl.textContent = nextSerial;
+      if (homeCountEl) homeCountEl.textContent = members.length;
+      if (regSerialEl) regSerialEl.textContent = nextSerial;
+
+      // Render Reference Sample Card (Image 1) on Homepage
+      const samplePeter = members.find(m => m.serial === 'A00810') || members[0];
+      const homeSampleWrap = document.getElementById('homeSampleBadgeWrapper');
+      if (homeSampleWrap && samplePeter) {
+        homeSampleWrap.innerHTML = buildFrontBadgeHTML(samplePeter);
+      }
+
+      renderCharactersGrid();
+      renderStoreSection();
+      syncMembershipGate();
+      renderRecentSerialChips();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      ensureInitialExclusiveOwnerSession();
+      getMembers();
+      getProducts();
+      syncAllUI();
+      checkUrlForScannedQr();
+    });
+  </script>
+</body>
+</html>
